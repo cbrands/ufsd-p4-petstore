@@ -20,3 +20,8 @@ header {
     display: inline;
     margin: 20px 0px;
 }
+
+.category-marking {
+    color: lightgrey;
+    font-style: italic;
+}
