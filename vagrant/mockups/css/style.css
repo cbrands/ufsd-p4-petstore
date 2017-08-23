@@ -1,8 +1,4 @@
 body {
-    background-color: lightgrey;
-}
-
-.container {
     background-color: antiquewhite;
 }
 
@@ -28,4 +24,8 @@ header {
 .category-marking {
     color: lightgrey;
     font-style: italic;
+}
+
+.margin-above {
+    margin-top: 20px;
 }
