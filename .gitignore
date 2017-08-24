@@ -3,3 +3,4 @@ vagrant/catalog/*
 vagrant/forum/*
 vagrant/tournament/*
 vagrant/Vagrantfile
+vagrant/*.db
