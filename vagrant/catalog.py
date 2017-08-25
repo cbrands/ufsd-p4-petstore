@@ -16,7 +16,7 @@ session = DBSession()
 def showAll():
     categories = session.query(Category).all()
     pets = session.query(Pet).all()
-    return render_template("index.html", categories=categories, pets=pets)
+    return render_template("index.html", categories=categories, pets=pets, selectedCategoryName="None")
 
 @app.route('/login')
 def login():
@@ -27,7 +27,7 @@ def showCategory(category_name):
     categories = session.query(Category).all()
     selectedCategory = session.query(Category).filter_by(name=category_name).one()
     pets = session.query(Pet).filter_by(category_id=selectedCategory.id)
-    return render_template("index.html", categories=categories, pets=pets)
+    return render_template("index.html", categories=categories, pets=pets, selectedCategoryName=selectedCategory.name)
 
 @app.route('/catalog/<int:category_id>/new/')
 def newMenuItem(catagory_id):

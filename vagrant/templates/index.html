@@ -21,21 +21,31 @@
                 {% for category in categories %}
                     <a class="list-group-item" href="{{ url_for('showCategory', category_name=category.name ) }}">{{category.name}}</a>
                 {% endfor %}
+                {% if selectedCategoryName != "None" %}
+                    <a class="glyphicon glyphicon-home" href="{{url_for('showAll')}}" role="button">Home</a>
+                {% endif %}
             </div>
         </aside>
         <section class="col-md-8 col-xs-12">
-            <h2>Latest pets:</h2>
-            <ul class="list-group">
+            {% if selectedCategoryName == "None" %}
+                <h2>Latest pets:</h2>
+            {% else %}
+                <h2>Latest pets for category {{selectedCategoryName}}:</h2>
+            {% endif %}
+            <div class="list-group">
                 {% for pet in pets %}
-                    <li class="list-group-item">{{pet.name}} <span class="category-marking">(
+                    <div class="list-group-item">{{pet.name}} <span class="category-marking">(
                         {% for category in categories %}
                             {% if category.id == pet.category_id %}
                                 {{category.name}}
                             {% endif %}
                         {% endfor %}
-                        )</span></li>
+                        )</span></div>
                 {% endfor %}
-            </ul>
+                {% if selectedCategoryName != "None" %}
+                    <a class="btn btn-primary" href="#" role="button">Add a pet</a>
+                {% endif %}
+            </div>
         </section>
     </div>
 </body>
