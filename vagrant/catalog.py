@@ -29,19 +29,24 @@ def showCategory(category_name):
     pets = session.query(Pet).filter_by(category_id=selectedCategory.id)
     return render_template("index.html", categories=categories, pets=pets, selectedCategoryName=selectedCategory.name)
 
-@app.route('/catalog/<int:category_id>/new/')
-def newMenuItem(catagory_id):
+@app.route('/catalog/<string:category_name>/<int:pet_id>/')
+def showPet(category_name, pet_id):
+    selectedPet = session.query(Pet).filter_by(id=pet_id).one()
+    return render_template("item.html", selectedPet=selectedPet)
+
+@app.route('/catalog/<string:category_name>/new/')
+def newMenuItem(category_name):
     return "page to create a new pet"
 
 
-@app.route('/catalog/<int:category_id>/<int:pet_id>/edit/')
-def editMenuItem(catagory_id, pet_id):
+@app.route('/catalog/<string:category_name>/<int:pet_id>/edit/')
+def editMenuItem(category_name, pet_id):
     return "page to edit a pet"
 
 
 
-@app.route('/catalog/<int:category_id>/<int:pet_id>/delete/')
-def deleteMenuItem(catagory_id, pet_id):
+@app.route('/catalog/<string:category_name>/<int:pet_id>/delete/')
+def deleteMenuItem(category_name, pet_id):
     return "page to delete a pet"
 
 

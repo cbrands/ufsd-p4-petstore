@@ -34,13 +34,12 @@
             {% endif %}
             <div class="list-group">
                 {% for pet in pets %}
-                    <div class="list-group-item">{{pet.name}} <span class="category-marking">(
-                        {% for category in categories %}
-                            {% if category.id == pet.category_id %}
-                                {{category.name}}
-                            {% endif %}
-                        {% endfor %}
-                        )</span></div>
+                    {% for category in categories %}
+                        {% if category.id == pet.category_id %}
+                            <a href="{{ url_for('showPet', category_name=category.name, pet_id=pet.id ) }}">{{pet.name}} </a>
+                            <span class="category-marking">({{category.name}})</span><br>
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
                 {% if selectedCategoryName != "None" %}
                     <a class="btn btn-primary" href="#" role="button">Add a pet</a>
