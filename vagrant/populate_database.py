@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Pet, User, Category
-from sqlalchemy import MetaData, Table, select
+#from sqlalchemy import MetaData, Table, select
 
 def addCategory(category):
     myCategory = Category(name = category)

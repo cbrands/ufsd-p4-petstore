@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
 
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from database_setup import Base, Pet, User, Category
+
+engine = create_engine('sqlite:///petstore.db')
+Base.metadata.bind = engine
+DBSession = sessionmaker(bind = engine)
+session = DBSession()
 
 @app.route('/')
 @app.route('/catalog')
 def showAll():
-    return "mainpage"
+    categories = session.query(Category).all()
+    pets = session.query(Pet).all()
+    return render_template("index.html", categories=categories, pets=pets)
 
 @app.route('/login')
 def login():

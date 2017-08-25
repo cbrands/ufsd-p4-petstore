@@ -1,0 +1,31 @@
+body {
+    background-color: antiquewhite;
+}
+
+header {
+    background-color: cornflowerblue;
+}
+
+.btn-orange {
+    background-color: orange;
+}
+
+.btn-login {
+    float: right;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.title-header {
+    display: inline;
+    margin: 20px 0px;
+}
+
+.category-marking {
+    color: lightgrey;
+    font-style: italic;
+}
+
+.margin-above {
+    margin-top: 20px;
+}
