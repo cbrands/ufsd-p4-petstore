@@ -16,6 +16,12 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
 
 
 class Pet(Base):
@@ -24,9 +30,18 @@ class Pet(Base):
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
-    imageSource = Column(String(80))
+    image_source = Column(String(80))
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'image_source': self.image_source,
+            'category_id': self.category_id
+        }
 
 
 class User(Base):

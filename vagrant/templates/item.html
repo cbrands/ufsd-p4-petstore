@@ -11,14 +11,17 @@
     <header>
         <div class="container">
             <h1 class="title-header">Honey Bunch Pet Store</h1>
-            <a class="btn btn-warning btn-login" href="#" role="button">Log in</a>
+            <div class="button-holder">
+                <a class="btn btn-warning" href="#" role="button">Log in</a>
+                <a class="btn btn-warning" href="{{ url_for('showPetJSON', category_name=category_name, pet_id=selectedPet.id ) }}"  role="button">JSON</a>
+            </div>
         </div>
     </header>
     <div class="container">
         <h2>{{selectedPet.name}}</h2>
         <figure class="figure">
-            <img src="{{selectedPet.imageSource}}" class="figure-img img-fluid rounded" alt="{{selectedPet.name}}">
-            <figcaption class="figure-caption"><a href="{{selectedPet.urlSource}}">Source.</a></figcaption>
+            <img src="{{selectedPet.image_source}}" class="figure-img img-fluid rounded" alt="{{selectedPet.name}}">
+            <figcaption class="figure-caption"><a href="{{selectedPet.image_source}}">Source.</a></figcaption>
         </figure>
         <p class="margin-above">   
             {{selectedPet.description}}
