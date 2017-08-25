@@ -19,7 +19,7 @@
             <h2>Categories:</h2>
             <div class="list-group">
                 {% for category in categories %}
-                    <div class="list-group-item">{{category.name}}</div>
+                    <a class="list-group-item" href="{{ url_for('showCategory', category_name=category.name ) }}">{{category.name}}</a>
                 {% endfor %}
             </div>
         </aside>

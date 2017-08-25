@@ -22,22 +22,25 @@ def showAll():
 def login():
     return "loginpage"
 
-@app.route('/catalog/<int:catagory_id>/')
-def showCategory(catagory_id):
-    return "categorypage"
+@app.route('/catalog/<string:category_name>/')
+def showCategory(category_name):
+    categories = session.query(Category).all()
+    selectedCategory = session.query(Category).filter_by(name=category_name).one()
+    pets = session.query(Pet).filter_by(category_id=selectedCategory.id)
+    return render_template("index.html", categories=categories, pets=pets)
 
-@app.route('/catalog/<int:catagory_id>/new/')
+@app.route('/catalog/<int:category_id>/new/')
 def newMenuItem(catagory_id):
     return "page to create a new pet"
 
 
-@app.route('/catalog/<int:catagory_id>/<int:pet_id>/edit/')
+@app.route('/catalog/<int:category_id>/<int:pet_id>/edit/')
 def editMenuItem(catagory_id, pet_id):
     return "page to edit a pet"
 
 
 
-@app.route('/catalog/<int:catagory_id>/<int:pet_id>/delete/')
+@app.route('/catalog/<int:category_id>/<int:pet_id>/delete/')
 def deleteMenuItem(catagory_id, pet_id):
     return "page to delete a pet"
 
