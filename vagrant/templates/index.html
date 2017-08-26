@@ -12,7 +12,11 @@
         <div class="container">
             <h1 class="title-header">Honey Bunch Pet Store</h1>
             <div class="button-holder">
-                <a class="btn btn-warning btn-in-header" href="#" role="button">Log in</a>
+                {% if not username%}
+                    <a class="btn btn-warning btn-in-header" href="/login" role="button">Log in</a>
+                {% else %}
+                    <a class="btn btn-warning btn-in-header" href="/gdisconnect" role="button">Log out</a>
+                {% endif %}
                 {% if selectedCategoryName == "None" %}
                     <a class="btn btn-warning btn-in-header" href="{{url_for('showAllJSON')}}" role="button">JSON</a>
                 {% else %}

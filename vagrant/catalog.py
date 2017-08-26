@@ -122,6 +122,37 @@ def gconnect():
     print ("done!")
     return output
 
+@app.route('/gdisconnect')
+def gdisconnect():
+    access_token = login_session.get('access_token')
+    if access_token is None:
+        print ('Access Token is None')
+        response = make_response(json.dumps('Current user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    print ('In gdisconnect access token is %s', access_token)
+    print ('User name is: ')
+    print (login_session['username'])
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    print ('result is ')
+    print (result)
+    if result['status'] == '200':
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+
 @app.route('/')
 @app.route('/catalog/')
 def showAll():
@@ -144,6 +175,8 @@ def showPet(category_name, pet_id):
 
 @app.route('/catalog/<string:category_name>/new/', methods=['GET', 'POST'])
 def newPet(category_name):
+    if 'username' not in login_session:
+        return redirect('/login')
     selectedCategory = session.query(Category).filter_by(name=category_name).one()
     if request.method == 'POST':
         newPet = Pet(
@@ -157,6 +190,8 @@ def newPet(category_name):
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/edit/', methods=['GET', 'POST'])
 def editPet(category_name, pet_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     selectedCategory = session.query(Category).filter_by(name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     if request.method == 'POST':
@@ -174,6 +209,8 @@ def editPet(category_name, pet_id):
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/delete/', methods=['GET', 'POST'])
 def deletePet(category_name, pet_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     selectedCategory = session.query(Category).filter_by(name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     if request.method == 'POST':
