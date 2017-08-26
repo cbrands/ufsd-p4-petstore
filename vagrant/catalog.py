@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 app = Flask(__name__)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -12,7 +12,7 @@ DBSession = sessionmaker(bind = engine)
 session = DBSession()
 
 @app.route('/')
-@app.route('/catalog')
+@app.route('/catalog/')
 def showAll():
     categories = session.query(Category).all()
     pets = session.query(Pet).all()
@@ -34,9 +34,17 @@ def showPet(category_name, pet_id):
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     return render_template("item.html", category_name=category_name, selectedPet=selectedPet)
 
-@app.route('/catalog/<string:category_name>/new/')
-def newMenuItem(category_name):
-    return "page to create a new pet"
+@app.route('/catalog/<string:category_name>/new/', methods=['GET', 'POST'])
+def newPet(category_name):
+    selectedCategory = session.query(Category).filter_by(name=category_name).one()
+    if request.method == 'POST':
+        newPet = Pet(
+            name=request.form['name'], description=request.form['description'], image_source=request.form['source'], category_id=selectedCategory.id)
+        session.add(newPet)
+        session.commit()
+        return redirect(url_for('showCategory', category_name=category_name))
+    else:
+        return render_template('new.html', selectedCategory=selectedCategory)
 
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/edit/')

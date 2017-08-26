@@ -49,7 +49,7 @@
                     {% endfor %}
                 {% endfor %}
                 {% if selectedCategoryName != "None" %}
-                    <a class="btn btn-primary" href="#" role="button">Add a pet</a>
+                    <a class="btn btn-primary" href="{{ url_for('newPet', category_name=selectedCategoryName)}}" role="button">Add a pet</a>
                 {% endif %}
             </div>
         </section>
