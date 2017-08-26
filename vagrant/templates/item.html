@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,17 +8,18 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
     <header>
         <div class="container">
             <h1 class="title-header">Honey Bunch Pet Store</h1>
             <div class="button-holder">
+                <!-- Show a login button if the user is not logged in. otherwise show a logout button -->
                 {% if showLoginButton%}
-                    <a class="btn btn-warning btn-in-header" href="/login" role="button">Log in</a>
-                {% else %}
-                    <a class="btn btn-warning btn-in-header" href="/gdisconnect" role="button">Log out</a>
-                {% endif %}
-                <a class="btn btn-warning" href="{{ url_for('showPetJSON', category_name=selectedCategoryName, pet_id=selectedPet.id ) }}"  role="button">JSON</a>
+                <a class="btn btn-warning btn-in-header" href="/login" role="button">Log in</a> {% else %}
+                <a class="btn btn-warning btn-in-header" href="/gdisconnect" role="button">Log out</a> {% endif %}
+                <!-- Always show a JSON button -->
+                <a class="btn btn-warning" href="{{ url_for('showPetJSON', category_name=selectedCategoryName, pet_id=selectedPet.id ) }}" role="button">JSON</a>
             </div>
         </div>
     </header>
@@ -25,15 +27,17 @@
         <h2>{{selectedPet.name}}</h2>
         <figure class="figure">
             <img src="{{selectedPet.image_source}}" class="figure-img img-fluid rounded" alt="{{selectedPet.name}}">
-            <figcaption class="figure-caption"><a href="{{selectedPet.image_source}}">Source.</a></figcaption>
+            <figcaption class="figure-caption"><a href="{{selectedPet.image_source}}">Source.</a>
+            </figcaption>
         </figure>
-        <p class="margin-above">   
+        <p class="margin-above">
             {{selectedPet.description}}
         </p>
-        <a class="btn btn-primary" href="{{ url_for('editPet', category_name=selectedCategoryName, pet_id=selectedPet.id)}}" role="button">Edit</a> 
+        <a class="btn btn-primary" href="{{ url_for('editPet', category_name=selectedCategoryName, pet_id=selectedPet.id)}}" role="button">Edit</a>
         <a class="btn btn-danger" href="{{ url_for('deletePet', category_name=selectedCategoryName, pet_id=selectedPet.id)}}" role="button">Delete</a>
         <a class="glyphicon glyphicon-home" href="{{url_for('showAll')}}" role="button">Home</a>
-        
+
     </div>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -15,10 +17,11 @@
     </header>
     <div class="container">
         <h2>Are you sure you wish to delete {{selectedPet.name}}?</h2>
-        <form action="{{url_for('deletePet', category_name=selectedCategory.name, pet_id=selectedPet.id)}}" method = 'POST'>
+        <form action="{{url_for('deletePet', category_name=selectedCategory.name, pet_id=selectedPet.id)}}" method='POST'>
             <button type="submit" class="btn btn-default">Yes</button>
         </form>
-        <a href= "{{url_for('showCategory', category_name=selectedCategory.name)}}">Cancel</a>
+        <a href="{{url_for('showCategory', category_name=selectedCategory.name)}}">Cancel</a>
     </div>
 </body>
+
 </html>
