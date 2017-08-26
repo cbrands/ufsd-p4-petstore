@@ -146,23 +146,33 @@ def gdisconnect():
         del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        print(response)
+        return redirect(url_for('showAll'))
     else:
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
-        return response
+        print(response)
+        return redirect(url_for('showAll'))
 
 
 @app.route('/')
 @app.route('/catalog/')
 def showAll():
+    if 'username' not in login_session:
+        showLoginButton=True
+    else:
+        showLoginButton=False
     categories = session.query(Category).all()
     pets = session.query(Pet).all()
-    return render_template("index.html", categories=categories, pets=pets, selectedCategoryName="None")
+    return render_template("index.html", categories=categories, pets=pets, selectedCategoryName="None", showLoginButton=showLoginButton)
 
 
 @app.route('/catalog/<string:category_name>/')
 def showCategory(category_name):
+    if 'username' not in login_session:
+        showLoginButton=True
+    else:
+        showLoginButton=False
     categories = session.query(Category).all()
     selectedCategory = session.query(Category).filter_by(name=category_name).one()
     pets = session.query(Pet).filter_by(category_id=selectedCategory.id)
@@ -170,6 +180,10 @@ def showCategory(category_name):
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/')
 def showPet(category_name, pet_id):
+    if 'username' not in login_session:
+        showLoginButton=True
+    else:
+        showLoginButton=False
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     return render_template("item.html", selectedCategoryName=category_name, selectedPet=selectedPet)
 

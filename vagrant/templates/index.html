@@ -12,7 +12,7 @@
         <div class="container">
             <h1 class="title-header">Honey Bunch Pet Store</h1>
             <div class="button-holder">
-                {% if not username%}
+                {% if showLoginButton%}
                     <a class="btn btn-warning btn-in-header" href="/login" role="button">Log in</a>
                 {% else %}
                     <a class="btn btn-warning btn-in-header" href="/gdisconnect" role="button">Log out</a>
