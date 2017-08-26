@@ -64,9 +64,16 @@ def editPet(category_name, pet_id):
     else:
         return render_template('edit.html', selectedCategory=selectedCategory, selectedPet=selectedPet)
 
-@app.route('/catalog/<string:category_name>/<int:pet_id>/delete/')
+@app.route('/catalog/<string:category_name>/<int:pet_id>/delete/', methods=['GET', 'POST'])
 def deletePet(category_name, pet_id):
-    return "page to delete a pet"
+    selectedCategory = session.query(Category).filter_by(name=category_name).one()
+    selectedPet = session.query(Pet).filter_by(id=pet_id).one()
+    if request.method == 'POST':
+        session.delete(selectedPet)
+        session.commit()
+        return redirect(url_for('showCategory', category_name=category_name))
+    else:
+        return render_template('delete.html', selectedCategory=selectedCategory, selectedPet=selectedPet)
 
 @app.route('/catalog/JSON')
 def showAllJSON():
