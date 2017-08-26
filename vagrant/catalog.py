@@ -32,7 +32,7 @@ def showCategory(category_name):
 @app.route('/catalog/<string:category_name>/<int:pet_id>/')
 def showPet(category_name, pet_id):
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
-    return render_template("item.html", category_name=category_name, selectedPet=selectedPet)
+    return render_template("item.html", selectedCategoryName=category_name, selectedPet=selectedPet)
 
 @app.route('/catalog/<string:category_name>/new/', methods=['GET', 'POST'])
 def newPet(category_name):
@@ -47,12 +47,25 @@ def newPet(category_name):
         return render_template('new.html', selectedCategory=selectedCategory)
 
 
-@app.route('/catalog/<string:category_name>/<int:pet_id>/edit/')
-def editMenuItem(category_name, pet_id):
-    return "page to edit a pet"
+@app.route('/catalog/<string:category_name>/<int:pet_id>/edit/', methods=['GET', 'POST'])
+def editPet(category_name, pet_id):
+    selectedCategory = session.query(Category).filter_by(name=category_name).one()
+    selectedPet = session.query(Pet).filter_by(id=pet_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            selectedPet.name = request.form['name']
+        if request.form['description']:
+            selectedPet.description = request.form['description']
+        if request.form['source']:
+            selectedPet.image_source = request.form['source']
+        session.add(selectedPet)
+        session.commit()
+        return redirect(url_for('showCategory', category_name=category_name))
+    else:
+        return render_template('edit.html', selectedCategory=selectedCategory, selectedPet=selectedPet)
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/delete/')
-def deleteMenuItem(category_name, pet_id):
+def deletePet(category_name, pet_id):
     return "page to delete a pet"
 
 @app.route('/catalog/JSON')

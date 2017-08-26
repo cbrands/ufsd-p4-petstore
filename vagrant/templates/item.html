@@ -13,7 +13,7 @@
             <h1 class="title-header">Honey Bunch Pet Store</h1>
             <div class="button-holder">
                 <a class="btn btn-warning" href="#" role="button">Log in</a>
-                <a class="btn btn-warning" href="{{ url_for('showPetJSON', category_name=category_name, pet_id=selectedPet.id ) }}"  role="button">JSON</a>
+                <a class="btn btn-warning" href="{{ url_for('showPetJSON', category_name=selectedCategoryName, pet_id=selectedPet.id ) }}"  role="button">JSON</a>
             </div>
         </div>
     </header>
@@ -26,7 +26,7 @@
         <p class="margin-above">   
             {{selectedPet.description}}
         </p>
-        <a class="btn btn-primary" href="#" role="button">Edit</a> 
+        <a class="btn btn-primary" href="{{ url_for('editPet', category_name=selectedCategoryName, pet_id=selectedPet.id)}}" role="button">Edit</a> 
         <a class="btn btn-danger" href="#" role="button">Delete</a>
         <a class="glyphicon glyphicon-home" href="{{url_for('showAll')}}" role="button">Home</a>
         
