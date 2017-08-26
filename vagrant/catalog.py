@@ -6,10 +6,26 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Pet, User, Category
 
+# imports needed for security
+from flask import session as login_session
+import random
+import string
+
+
 engine = create_engine('sqlite:///petstore.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind = engine)
 session = DBSession()
+
+
+# Create anti-forgery state token
+@app.route('/login')
+def showLogin():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in range(32))
+    login_session['state'] = state
+    return "The current session state is %s" % login_session['state']
+
 
 @app.route('/')
 @app.route('/catalog/')
@@ -18,9 +34,6 @@ def showAll():
     pets = session.query(Pet).all()
     return render_template("index.html", categories=categories, pets=pets, selectedCategoryName="None")
 
-@app.route('/login')
-def login():
-    return "loginpage"
 
 @app.route('/catalog/<string:category_name>/')
 def showCategory(category_name):
@@ -94,5 +107,6 @@ def showPetJSON(category_name, pet_id):
     return jsonify(selectedPet.serialize)
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host = '0.0.0.0', port = 5000)
