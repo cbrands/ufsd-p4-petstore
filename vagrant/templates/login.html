@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Honey Bunch Pet store</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//apis.google.com/js/platform.js?onload=start"></script>
+    <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+</head>
+<body>  
+    <!-- GOOGLE PLUS SIGN IN BUTTON-->
+    <div id="signInButton">
+        <span class="g-signin"
+              data-scope="openid email"
+              data-clientid="383671116671-trmoclk1q82b7q4j33ohb1qf8jmimib6.apps.googleusercontent.com"
+              data-redirecturi="postmessage"
+              data-accesstype="offline"
+              data-cookiepolicy="single_host_origin"
+              data-callback="signInCallback"
+              data-approvalprompt="force">
+        </span>
+    </div>
+    <!--END GOOGLE PLUS SIGN IN BUTTON -->
+</body>
+</html>

@@ -23,3 +23,7 @@ header {
 .margin-above {
     margin-top: 20px;
 }
+
+#signInButton {
+    margin: auto;
+}
