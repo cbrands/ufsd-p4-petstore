@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
+from flask import Flask, render_template, jsonify, request
+from flask import redirect, url_for, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Pet, Category, User
@@ -229,7 +230,7 @@ def showPet(category_name, pet_id):
     '''
     Show the selected pet
     '''
-    user_id=login_session['user_id']
+    user_id = login_session['user_id']
     if 'username' not in login_session:
         showLoginButton = True
     else:
@@ -280,10 +281,12 @@ def editPet(category_name, pet_id):
     selectedCategory = session.query(Category).filter_by(
         name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
-    user_id=login_session['user_id']
+    user_id = login_session['user_id']
     if user_id != selectedPet.user_id:
         flash("You are not authorized to harm this pet")
-        return redirect(url_for('showPet', category_name=category_name, pet_id=pet_id))
+        return redirect(url_for('showPet',
+                                category_name=category_name,
+                                pet_id=pet_id))
     if request.method == 'POST':
         if request.form['name']:
             selectedPet.name = request.form['name']
@@ -313,10 +316,12 @@ def deletePet(category_name, pet_id):
     selectedCategory = session.query(Category).filter_by(
         name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
-    user_id=login_session['user_id']
+    user_id = login_session['user_id']
     if user_id != selectedPet.user_id:
         flash("You are not authorized to harm this pet")
-        return redirect(url_for('showPet', category_name=category_name, pet_id=pet_id))
+        return redirect(url_for('showPet',
+                                category_name=category_name,
+                                pet_id=pet_id))
     if request.method == 'POST':
         session.delete(selectedPet)
         session.commit()

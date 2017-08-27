@@ -21,7 +21,7 @@ class User(Base):
     name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
 
-    
+
 # Defining the Category class and table
 class Category(Base):
     __tablename__ = 'category'
