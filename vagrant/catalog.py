@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Pet, Category
+from database_setup import Base, Pet, Category, User
 from functools import wraps
 # imports needed for security
 from flask import session as login_session
@@ -126,6 +126,10 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+    user_id = getUserId(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -225,6 +229,7 @@ def showPet(category_name, pet_id):
     '''
     Show the selected pet
     '''
+    user_id=login_session['user_id']
     if 'username' not in login_session:
         showLoginButton = True
     else:
@@ -233,7 +238,8 @@ def showPet(category_name, pet_id):
     return render_template("item.html",
                            selectedCategoryName=category_name,
                            selectedPet=selectedPet,
-                           showLoginButton=showLoginButton)
+                           showLoginButton=showLoginButton,
+                           user_id=user_id)
 
 
 @app.route('/catalog/<string:category_name>/new/', methods=['GET', 'POST'])
@@ -253,6 +259,7 @@ def newPet(category_name):
             description=request.form['description'],
             image_source=request.form['source'],
             category_id=selectedCategory.id)
+        user_id=login_session['user_id']
         session.add(newPet)
         session.commit()
         return redirect(url_for('showCategory', category_name=category_name))
@@ -273,6 +280,9 @@ def editPet(category_name, pet_id):
     selectedCategory = session.query(Category).filter_by(
         name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
+    user_id=login_session['user_id']
+    if user_id != selectedPet.user_id:
+        return redirect(url_for('showPet', category_name=category_name, pet_id=pet_id))
     if request.method == 'POST':
         if request.form['name']:
             selectedPet.name = request.form['name']
@@ -302,6 +312,9 @@ def deletePet(category_name, pet_id):
     selectedCategory = session.query(Category).filter_by(
         name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
+    user_id=login_session['user_id']
+    if user_id != selectedPet.user_id:
+        return redirect(url_for('showPet', category_name=category_name, pet_id=pet_id))
     if request.method == 'POST':
         session.delete(selectedPet)
         session.commit()
@@ -344,6 +357,39 @@ def showPetJSON(category_name, pet_id):
     '''
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     return jsonify(selectedPet.serialize)
+
+
+# User functions
+def createUser(login_session):
+    '''
+    Create a new user
+    '''
+    newUser = User(name=login_session['username'],
+                   email=login_session['email'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    '''
+    retrieves user from user_id
+    '''
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserId(email):
+    '''
+    retrieves user id from email if the email belongs to a known user
+    else return None
+    '''
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
 
 
 if __name__ == '__main__':
