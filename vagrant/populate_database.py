@@ -9,7 +9,7 @@ application can handle an empty category.
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Pet, User, Category
+from database_setup import Base, Pet, Category
 
 
 def addCategory(category):
