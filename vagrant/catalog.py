@@ -28,9 +28,11 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-# Create anti-forgery state token
 @app.route('/login')
 def showLogin():
+    '''
+    Create anti-forgery state token
+    '''
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in range(32))
     login_session['state'] = state
@@ -39,6 +41,11 @@ def showLogin():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    '''
+    This function is adapted from Udacity fullstack nanodegree
+    lesson 11 Creating Google sign in
+    here we use google to login
+    '''
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
@@ -126,6 +133,11 @@ def gconnect():
 
 @app.route('/gdisconnect')
 def gdisconnect():
+    '''
+    This function is adapted from Udacity fullstack nanodegree
+    lesson 11 Creating Google sign in
+    here we disconnect
+    '''
     access_token = login_session.get('access_token')
     if access_token is None:
         print('Access Token is None')
@@ -163,6 +175,10 @@ def gdisconnect():
 @app.route('/')
 @app.route('/catalog/')
 def showAll():
+    '''
+    Mainpage. query for all categories and all pets and show them
+    on index.html.
+    '''
     if 'username' not in login_session:
         showLoginButton = True
     else:
@@ -177,6 +193,10 @@ def showAll():
 
 @app.route('/catalog/<string:category_name>/')
 def showCategory(category_name):
+    '''
+    Categorypage. query for all categories (for the side bar) and the
+    pets belonging to the selected category and show them on index.html.
+    '''
     if 'username' not in login_session:
         showLoginButton = True
     else:
@@ -192,6 +212,9 @@ def showCategory(category_name):
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/')
 def showPet(category_name, pet_id):
+    '''
+    Show the selected pet
+    '''
     if 'username' not in login_session:
         showLoginButton = True
     else:
@@ -204,6 +227,12 @@ def showPet(category_name, pet_id):
 
 @app.route('/catalog/<string:category_name>/new/', methods=['GET', 'POST'])
 def newPet(category_name):
+    '''
+    Create a new pet if the user is logged in otherwise redirect
+    to login page.
+    If this method is called with a GET request then new.html is shown
+    If this method is called with a post request the new pet is saved
+    '''
     if 'username' not in login_session:
         return redirect('/login')
     selectedCategory = session.query(Category)
@@ -224,6 +253,12 @@ def newPet(category_name):
 @app.route('/catalog/<string:category_name>/<int:pet_id>/edit/',
            methods=['GET', 'POST'])
 def editPet(category_name, pet_id):
+    '''
+    Edit pet if the user is logged in otherwise redirect
+    to login page.
+    If this method is called with a GET request then edit.html is shown
+    If this method is called with a post request the pet is saved
+    '''
     if 'username' not in login_session:
         return redirect('/login')
     selectedCategory = session.query(Category)
@@ -248,6 +283,12 @@ def editPet(category_name, pet_id):
 @app.route('/catalog/<string:category_name>/<int:pet_id>/delete/',
            methods=['GET', 'POST'])
 def deletePet(category_name, pet_id):
+    '''
+    Delete pet if the user is logged in otherwise redirect
+    to login page.
+    If this method is called with a GET request then delete.html is shown
+    If this method is called with a post request the pet is deleted
+    '''
     if 'username' not in login_session:
         return redirect('/login')
     selectedCategory = session.query(Category)
@@ -265,6 +306,9 @@ def deletePet(category_name, pet_id):
 
 @app.route('/catalog/JSON')
 def showAllJSON():
+    '''
+    Shows JSON data from all pets and categories
+    '''
     categories = session.query(Category).all()
     pets = session.query(Pet).all()
     return jsonify(categories=[c.serialize for c in categories],
@@ -273,6 +317,9 @@ def showAllJSON():
 
 @app.route('/catalog/<string:category_name>/JSON')
 def showCategoryJSON(category_name):
+    '''
+    Shows JSON data from all pets belonging to the selected category
+    '''
     categories = session.query(Category).all()
     selectedCategory = session.query(Category)
     .filter_by(name=category_name).one()
@@ -284,6 +331,9 @@ def showCategoryJSON(category_name):
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/JSON')
 def showPetJSON(category_name, pet_id):
+    '''
+    Shows JSON data from the selected pet
+    '''
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     return jsonify(selectedPet.serialize)
 

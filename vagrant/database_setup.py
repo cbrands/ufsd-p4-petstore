@@ -13,6 +13,7 @@ from sqlalchemy import create_engine
 Base = declarative_base()
 
 
+# Defining the Category class and table
 class Category(Base):
     __tablename__ = 'category'
 
@@ -27,6 +28,7 @@ class Category(Base):
         }
 
 
+# Defining the Pet class and table
 class Pet(Base):
     __tablename__ = 'pet'
 
