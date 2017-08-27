@@ -4,6 +4,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Pet, Category
+from functools import wraps
 # imports needed for security
 from flask import session as login_session
 import random
@@ -26,6 +27,15 @@ engine = create_engine('sqlite:///petstore.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in login_session:
+            return redirect('/login')
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @app.route('/login')
@@ -227,6 +237,7 @@ def showPet(category_name, pet_id):
 
 
 @app.route('/catalog/<string:category_name>/new/', methods=['GET', 'POST'])
+@login_required
 def newPet(category_name):
     '''
     Create a new pet if the user is logged in otherwise redirect
@@ -234,8 +245,6 @@ def newPet(category_name):
     If this method is called with a GET request then new.html is shown
     If this method is called with a post request the new pet is saved
     '''
-    if 'username' not in login_session:
-        return redirect('/login')
     selectedCategory = session.query(Category).filter_by(
         name=category_name).one()
     if request.method == 'POST':
@@ -253,6 +262,7 @@ def newPet(category_name):
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/edit/',
            methods=['GET', 'POST'])
+@login_required
 def editPet(category_name, pet_id):
     '''
     Edit pet if the user is logged in otherwise redirect
@@ -260,8 +270,6 @@ def editPet(category_name, pet_id):
     If this method is called with a GET request then edit.html is shown
     If this method is called with a post request the pet is saved
     '''
-    if 'username' not in login_session:
-        return redirect('/login')
     selectedCategory = session.query(Category).filter_by(
         name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
@@ -283,6 +291,7 @@ def editPet(category_name, pet_id):
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/delete/',
            methods=['GET', 'POST'])
+@login_required
 def deletePet(category_name, pet_id):
     '''
     Delete pet if the user is logged in otherwise redirect
@@ -290,8 +299,6 @@ def deletePet(category_name, pet_id):
     If this method is called with a GET request then delete.html is shown
     If this method is called with a post request the pet is deleted
     '''
-    if 'username' not in login_session:
-        return redirect('/login')
     selectedCategory = session.query(Category).filter_by(
         name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
