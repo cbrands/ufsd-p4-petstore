@@ -48,6 +48,23 @@ python3 catalog.py
 You can now start the webrowser and open the page on localhost:5000
 
 ## Using the application
+This application can be used as a logged in user or a user that is not logged in. Looking on the main screen you will see a list of categories on the left and all the pets on the right. At the top right you will see a login button and a JSON button.
+![main screen](/screenshots/MainScreen.png "Main screen")
+
+### Navigation
+Clicking on one of the categories will bring the user to a category page. The URL in the adress bar will change to reflect the chosen category. Also the list of pets will now only show the pets belonging to the chosen category. The chosen category is now active meaning that the category button has a differend color. At the bottom of the category list a home button leading to the main screen has appeared. At the bottom of the list of pets an "Add a pet" button is revealed. This button will lead to the new screen if the user is logged in or to the login screen if the user is not logged in.
+
+![category screen](/screenshots/CategoryScreen.png "Category screen")
+
+Clicking on one of the Pets will bring the user to the page of the selected pet. Showing the name, description, the image, a link to the image source and edit and delete buttons. If the user is logged in clicking on the edit and delete buttons will bring the user to the edit and delete screens respectively. If the user is not logged in clicking on these buttons if the user is not logged in wil bring the user to the login screen. Also a home button is shown bringing the user back to the main screen.
+
+![item screen](/screenshots/ItemScreen.png "Item screen")
+
+### Showing JSON data
+On the top right of the main, category, and item screems there is a button with the name JSON. Clicking on this button will show the appropiate JSON data. Use the back button of the browser to get back to the main application. 
+
+
+Clicking on the login button will lead the user to the login screen. After logging in the user will be back 
 
 ## Stopping
 To logout and stop the virtual machine type
