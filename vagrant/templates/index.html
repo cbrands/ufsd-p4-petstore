@@ -16,12 +16,16 @@
             <div class="button-holder">
                 <!-- Show a login button if the user is not logged in. otherwise show a logout button -->
                 {% if showLoginButton%}
-                <a class="btn btn-warning btn-in-header" href="/login" role="button">Log in</a> {% else %}
-                <a class="btn btn-warning btn-in-header" href="/gdisconnect" role="button">Log out</a> {% endif %}
+                    <a class="btn btn-warning btn-in-header" href="/login" role="button">Log in</a>
+                {% else %}
+                    <a class="btn btn-warning btn-in-header" href="/gdisconnect" role="button">Log out</a>
+                {% endif %}
                 <!-- Always show a JSON button the data depends on which category is selected -->
                 {% if selectedCategoryName == "None" %}
-                <a class="btn btn-warning btn-in-header" href="{{url_for('showAllJSON')}}" role="button">JSON</a> {% else %}
-                <a class="btn btn-warning btn-in-header" href="{{ url_for('showCategoryJSON', category_name=selectedCategoryName ) }}" role="button">JSON</a> {% endif %}
+                    <a class="btn btn-warning btn-in-header" href="{{url_for('showAllJSON')}}" role="button">JSON</a> 
+                {% else %}
+                    <a class="btn btn-warning btn-in-header" href="{{ url_for('showCategoryJSON', category_name=selectedCategoryName ) }}" role="button">JSON</a>
+                {% endif %}
             </div>
         </div>
     </header>
@@ -30,28 +34,42 @@
             <h2>Categories:</h2>
             <div class="list-group">
                 {% for category in categories %}
-                <a class="list-group-item" href="{{ url_for('showCategory', category_name=category.name ) }}">{{category.name}}</a> {% endfor %}
+                    {% if selectedCategoryName == category.name %}
+                        <a class="list-group-item active" href="{{ url_for('showCategory', category_name=category.name ) }}">{{category.name}}</a>
+                    {% else %}
+                        <a class="list-group-item" href="{{ url_for('showCategory', category_name=category.name ) }}">{{category.name}}</a>
+                    {% endif %}
+                {% endfor %}
                 <!--  if selectedCategoryName == "None" then you are already on the main screen so you would not need a home button -->
                 {% if selectedCategoryName != "None" %}
-                <a class="glyphicon glyphicon-home" href="{{url_for('showAll')}}" role="button">Home</a> {% endif %}
+                    <a class="glyphicon glyphicon-home" href="{{url_for('showAll')}}" role="button">Home</a>
+                {% endif %}
             </div>
         </aside>
         <section class="col-md-8 col-xs-12">
             {% if selectedCategoryName == "None" %}
-            <h2>Latest pets:</h2> {% else %}
-            <h2>Latest pets for category {{selectedCategoryName}}:</h2> {% endif %}
+                <h2>Latest pets:</h2>
+            {% else %}
+                <h2>Latest pets for category {{selectedCategoryName}}:</h2>
+            {% endif %}
             <div class="list-group">
                 <!-- Loop over pets and categories -->
                 <!-- if the category.id and pet.category_id matches then print.  -->
                 <!-- then print the petname as a link and print the category name to the screen -->
-                {% for pet in pets %} {% for category in categories %} {% if category.id == pet.category_id %}
-                <!-- Show the pets as a link to their own page -->
-                <a href="{{ url_for('showPet', category_name=category.name, pet_id=pet.id ) }}">{{pet.name}} </a>
-                <span class="category-marking">({{category.name}})</span>
-                <br> {% endif %} {% endfor %} {% endfor %}
+                {% for pet in pets %}
+                    {% for category in categories %}
+                        {% if category.id == pet.category_id %}
+                                <!-- Show the pets as a link to their own page -->
+                                <a href="{{ url_for('showPet', category_name=category.name, pet_id=pet.id ) }}">{{pet.name}} </a>
+                                <span class="category-marking">({{category.name}})</span>
+                            <br>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
                 <!-- If a category is selected then a button will appear to add a pet to that category -->
                 {% if selectedCategoryName != "None" %}
-                <a class="btn btn-primary" href="{{ url_for('newPet', category_name=selectedCategoryName)}}" role="button">Add a pet</a> {% endif %}
+                    <a class="btn btn-primary" href="{{ url_for('newPet', category_name=selectedCategoryName)}}" role="button">Add a pet</a> 
+                {% endif %}
             </div>
         </section>
     </div>
