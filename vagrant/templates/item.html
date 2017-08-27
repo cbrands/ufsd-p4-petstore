@@ -16,8 +16,10 @@
             <div class="button-holder">
                 <!-- Show a login button if the user is not logged in. otherwise show a logout button -->
                 {% if showLoginButton%}
-                <a class="btn btn-warning btn-in-header" href="/login" role="button">Log in</a> {% else %}
-                <a class="btn btn-warning btn-in-header" href="/gdisconnect" role="button">Log out</a> {% endif %}
+                    <a class="btn btn-warning btn-in-header" href="/login" role="button">Log in</a>
+                {% else %}
+                    <a class="btn btn-warning btn-in-header" href="/gdisconnect" role="button">Log out</a>
+                {% endif %}
                 <!-- Always show a JSON button -->
                 <a class="btn btn-warning" href="{{ url_for('showPetJSON', category_name=selectedCategoryName, pet_id=selectedPet.id ) }}" role="button">JSON</a>
             </div>
