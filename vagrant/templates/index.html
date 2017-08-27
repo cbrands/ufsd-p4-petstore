@@ -60,7 +60,7 @@
                     {% for category in categories %}
                         {% if category.id == pet.category_id %}
                                 <!-- Show the pets as a link to their own page -->
-                                <a href="{{ url_for('showPet', category_name=category.name, pet_id=pet.id ) }}">{{pet.name}} </a>
+                                <a href="{{ url_for('showPet', category_name=category.name, pet_id=pet.id) }}">{{pet.name}} </a>
                                 <span class="category-marking">({{category.name}})</span>
                             <br>
                         {% endif %}

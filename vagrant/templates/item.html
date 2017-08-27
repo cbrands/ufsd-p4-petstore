@@ -35,6 +35,15 @@
         <p class="margin-above">
             {{selectedPet.description}}
         </p>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li><strong>{{message}}</strong></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         <a class="btn btn-primary" href="{{ url_for('editPet', category_name=selectedCategoryName, pet_id=selectedPet.id)}}" role="button">Edit</a>
         <a class="btn btn-danger" href="{{ url_for('deletePet', category_name=selectedCategoryName, pet_id=selectedPet.id)}}" role="button">Delete</a>
         <a class="glyphicon glyphicon-home" href="{{url_for('showAll')}}" role="button">Home</a>

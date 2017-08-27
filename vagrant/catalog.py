@@ -258,8 +258,8 @@ def newPet(category_name):
             name=request.form['name'],
             description=request.form['description'],
             image_source=request.form['source'],
-            category_id=selectedCategory.id)
-        user_id=login_session['user_id']
+            category_id=selectedCategory.id,
+            user_id=login_session['user_id'])
         session.add(newPet)
         session.commit()
         return redirect(url_for('showCategory', category_name=category_name))
@@ -282,6 +282,7 @@ def editPet(category_name, pet_id):
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     user_id=login_session['user_id']
     if user_id != selectedPet.user_id:
+        flash("You are not authorized to harm this pet")
         return redirect(url_for('showPet', category_name=category_name, pet_id=pet_id))
     if request.method == 'POST':
         if request.form['name']:
@@ -314,6 +315,7 @@ def deletePet(category_name, pet_id):
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     user_id=login_session['user_id']
     if user_id != selectedPet.user_id:
+        flash("You are not authorized to harm this pet")
         return redirect(url_for('showPet', category_name=category_name, pet_id=pet_id))
     if request.method == 'POST':
         session.delete(selectedPet)
