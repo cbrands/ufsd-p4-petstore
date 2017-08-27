@@ -24,7 +24,7 @@ APPLICATION_NAME = "Petstore1"
 
 engine = create_engine('sqlite:///petstore.db')
 Base.metadata.bind = engine
-DBSession = sessionmaker(bind = engine)
+DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
@@ -83,16 +83,15 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print (CLIENT_ID)
-        print ("Token's client ID does not match app's.")
+        print("Token's client ID does not match app's.")
         response.headers['Content-Type'] = 'application/json'
         return response
 
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(json.dumps(
+            'Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -117,27 +116,32 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height: 300px;'
+    output += 'border-radius: 150px;-webkit-border-radius: 150px;'
+    output += '-moz-border-radius: 150px;"> '
     print("logged in as %s" % login_session['username'])
-    print ("done!")
+    print("done!")
     return output
+
 
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
-        print ('Access Token is None')
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        print('Access Token is None')
+        response = make_response(json.dumps(
+            'Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    print ('In gdisconnect access token is %s', access_token)
-    print ('User name is: ')
-    print (login_session['username'])
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    print('In gdisconnect access token is %s', access_token)
+    print('User name is: ')
+    print(login_session['username'])
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s'
+    % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print ('result is ')
-    print (result)
+    print('result is ')
+    print(result)
     if result['status'] == '200':
         del login_session['access_token']
         del login_session['gplus_id']
@@ -149,7 +153,8 @@ def gdisconnect():
         print(response)
         return redirect(url_for('showAll'))
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(json.dumps(
+            'Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         print(response)
         return redirect(url_for('showAll'))
@@ -159,42 +164,56 @@ def gdisconnect():
 @app.route('/catalog/')
 def showAll():
     if 'username' not in login_session:
-        showLoginButton=True
+        showLoginButton = True
     else:
-        showLoginButton=False
+        showLoginButton = False
     categories = session.query(Category).all()
     pets = session.query(Pet).all()
-    return render_template("index.html", categories=categories, pets=pets, selectedCategoryName="None", showLoginButton=showLoginButton)
+    return render_template("index.html",
+                           categories=categories, pets=pets,
+                           selectedCategoryName="None",
+                           showLoginButton=showLoginButton)
 
 
 @app.route('/catalog/<string:category_name>/')
 def showCategory(category_name):
     if 'username' not in login_session:
-        showLoginButton=True
+        showLoginButton = True
     else:
-        showLoginButton=False
+        showLoginButton = False
     categories = session.query(Category).all()
-    selectedCategory = session.query(Category).filter_by(name=category_name).one()
+    selectedCategory = session.query(Category)
+    .filter_by(name=category_name).one()
     pets = session.query(Pet).filter_by(category_id=selectedCategory.id)
-    return render_template("index.html", categories=categories, pets=pets, selectedCategoryName=selectedCategory.name)
+    return render_template("index.html",
+                           categories=categories, pets=pets,
+                           selectedCategoryName=selectedCategory.name)
+
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/')
 def showPet(category_name, pet_id):
     if 'username' not in login_session:
-        showLoginButton=True
+        showLoginButton = True
     else:
-        showLoginButton=False
+        showLoginButton = False
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
-    return render_template("item.html", selectedCategoryName=category_name, selectedPet=selectedPet)
+    return render_template("item.html",
+                           selectedCategoryName=category_name,
+                           selectedPet=selectedPet)
+
 
 @app.route('/catalog/<string:category_name>/new/', methods=['GET', 'POST'])
 def newPet(category_name):
     if 'username' not in login_session:
         return redirect('/login')
-    selectedCategory = session.query(Category).filter_by(name=category_name).one()
+    selectedCategory = session.query(Category)
+    .filter_by(name=category_name).one()
     if request.method == 'POST':
         newPet = Pet(
-            name=request.form['name'], description=request.form['description'], image_source=request.form['source'], category_id=selectedCategory.id)
+            name=request.form['name'],
+            description=request.form['description'],
+            image_source=request.form['source'],
+            category_id=selectedCategory.id)
         session.add(newPet)
         session.commit()
         return redirect(url_for('showCategory', category_name=category_name))
@@ -202,11 +221,13 @@ def newPet(category_name):
         return render_template('new.html', selectedCategory=selectedCategory)
 
 
-@app.route('/catalog/<string:category_name>/<int:pet_id>/edit/', methods=['GET', 'POST'])
+@app.route('/catalog/<string:category_name>/<int:pet_id>/edit/',
+           methods=['GET', 'POST'])
 def editPet(category_name, pet_id):
     if 'username' not in login_session:
         return redirect('/login')
-    selectedCategory = session.query(Category).filter_by(name=category_name).one()
+    selectedCategory = session.query(Category)
+    .filter_by(name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     if request.method == 'POST':
         if request.form['name']:
@@ -219,40 +240,55 @@ def editPet(category_name, pet_id):
         session.commit()
         return redirect(url_for('showCategory', category_name=category_name))
     else:
-        return render_template('edit.html', selectedCategory=selectedCategory, selectedPet=selectedPet)
+        return render_template('edit.html',
+                               selectedCategory=selectedCategory,
+                               selectedPet=selectedPet)
 
-@app.route('/catalog/<string:category_name>/<int:pet_id>/delete/', methods=['GET', 'POST'])
+
+@app.route('/catalog/<string:category_name>/<int:pet_id>/delete/',
+           methods=['GET', 'POST'])
 def deletePet(category_name, pet_id):
     if 'username' not in login_session:
         return redirect('/login')
-    selectedCategory = session.query(Category).filter_by(name=category_name).one()
+    selectedCategory = session.query(Category)
+    .filter_by(name=category_name).one()
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     if request.method == 'POST':
         session.delete(selectedPet)
         session.commit()
         return redirect(url_for('showCategory', category_name=category_name))
     else:
-        return render_template('delete.html', selectedCategory=selectedCategory, selectedPet=selectedPet)
+        return render_template('delete.html',
+                               selectedCategory=selectedCategory,
+                               selectedPet=selectedPet)
+
 
 @app.route('/catalog/JSON')
 def showAllJSON():
     categories = session.query(Category).all()
     pets = session.query(Pet).all()
-    return jsonify(categories=[c.serialize for c in categories], pets=[p.serialize for p in pets])
+    return jsonify(categories=[c.serialize for c in categories],
+                   pets=[p.serialize for p in pets])
+
 
 @app.route('/catalog/<string:category_name>/JSON')
 def showCategoryJSON(category_name):
     categories = session.query(Category).all()
-    selectedCategory = session.query(Category).filter_by(name=category_name).one()
+    selectedCategory = session.query(Category)
+    .filter_by(name=category_name).one()
     pets = session.query(Pet).filter_by(category_id=selectedCategory.id)
-    return jsonify(categories=[c.serialize for c in categories], pets=[p.serialize for p in pets], selectedCategoryName=selectedCategory.name)
+    return jsonify(categories=[c.serialize for c in categories],
+                   pets=[p.serialize for p in pets],
+                   selectedCategoryName=selectedCategory.name)
+
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/JSON')
 def showPetJSON(category_name, pet_id):
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     return jsonify(selectedPet.serialize)
 
+
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host = '0.0.0.0', port = 5000)
+    app.run(host='0.0.0.0', port=5000)
