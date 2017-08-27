@@ -63,13 +63,13 @@ Clicking on one of the Pets will bring the user to the page of the selected pet.
 ![item screen](/screenshots/ItemScreen.png "Item screen")
 
 ### Showing JSON data
-On the top right of the main, category, and item screems there is a button with the name JSON. Clicking on this button will show the appropiate JSON data. Use the back button of the browser to get back to the main application. 
+On the top right of the main, category, and item screens there is a button with the name JSON. Clicking on this button will show the appropiate JSON data. Use the back button of the browser to get back to the main application. 
 
 ### Login
 Clicking on the login button will lead the user to the login screen. This is a screen with a google plus button. Clicking on this button allows the user to login using google+. After logging in the user will be back on the main screen. Note that the login button now reads "Log out". Clicking on the logout will log the user out and changes the "Log out" button back to "Log in".
 
 ### Adding a pet
-If the user is on the category screen an "Add a pet" button is visible. If the user is logged in then clicking on the link will show the nes screen. Here the user can fill in the name and description of the pet as wel as the URL to a picture. 
+If the user is on the category screen an "Add a pet" button is visible. If the user is logged in then clicking on the link will show the new screen. Here the user can fill in the name and description of the pet as wel as the URL to a picture. 
 
 ![new screen](/screenshots/NewScreen.png "New screen")
 
