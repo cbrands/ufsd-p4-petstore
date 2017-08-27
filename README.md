@@ -13,11 +13,13 @@ This project is my implementation of the item\_catalog project. This is the four
 * vagrant/catalog.py -- this script is the actual application
 * vagrant/static/style.css -- Simple ccs file, I did't want the app to be to ugly
 * vagrant/templates/\*.html -- These are templates used by catalog.py to create the webpages
+* screenshot/\*.png -- screenshots used in this README.png
 
 ## How to start.
 ### Prerequisites
 * [Virtualbox](https://www.virtualbox.org/)
 * [Vagrant](https://www.vagrantup.com/)
+* A google account is need to login
 
 ### Preparing the environment
 * [Download the virtual machine](https://d17h27t6h515a5.cloudfront.net/topher/2017/August/59822701_fsnd-virtual-machine/fsnd-virtual-machine.zip)
@@ -63,8 +65,23 @@ Clicking on one of the Pets will bring the user to the page of the selected pet.
 ### Showing JSON data
 On the top right of the main, category, and item screems there is a button with the name JSON. Clicking on this button will show the appropiate JSON data. Use the back button of the browser to get back to the main application. 
 
+### Login
+Clicking on the login button will lead the user to the login screen. This is a screen with a google plus button. Clicking on this button allows the user to login using google+. After logging in the user will be back on the main screen. Note that the login button now reads "Log out". Clicking on the logout will log the user out and changes the "Log out" button back to "Log in".
 
-Clicking on the login button will lead the user to the login screen. After logging in the user will be back 
+### Adding a pet
+If the user is on the category screen an "Add a pet" button is visible. If the user is logged in then clicking on the link will show the nes screen. Here the user can fill in the name and description of the pet as wel as the URL to a picture. 
+
+![new screen](/screenshots/NewScreen.png "New screen")
+
+### Editing a pet
+If the user is on the item screen an edit button is visible. If the user is logged in then clicking on this button will show the edit screen. This screen is the same as the new screen above except that the placeholder attribute shows the old values.
+
+![edit screen](/screenshots/EditScreen.png "Edit screen")
+
+### Deleting a pet
+If the user is on the item screen a delete button is visible. If the user is logged in then clicking on this button will show the delete screen. Here the user can either click on OK to delete the pet or on cancel. 
+
+![delete screen](/screenshots/DeleteScreen.png "Delete screen")
 
 ## Stopping
 To logout and stop the virtual machine type
