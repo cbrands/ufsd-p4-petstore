@@ -206,7 +206,8 @@ def showCategory(category_name):
     pets = session.query(Pet).filter_by(category_id=selectedCategory.id)
     return render_template("index.html",
                            categories=categories, pets=pets,
-                           selectedCategoryName=selectedCategory.name)
+                           selectedCategoryName=selectedCategory.name,
+                           showLoginButton=showLoginButton)
 
 
 @app.route('/catalog/<string:category_name>/<int:pet_id>/')
@@ -221,7 +222,8 @@ def showPet(category_name, pet_id):
     selectedPet = session.query(Pet).filter_by(id=pet_id).one()
     return render_template("item.html",
                            selectedCategoryName=category_name,
-                           selectedPet=selectedPet)
+                           selectedPet=selectedPet,
+                           showLoginButton=showLoginButton)
 
 
 @app.route('/catalog/<string:category_name>/new/', methods=['GET', 'POST'])
